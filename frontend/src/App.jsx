@@ -63,45 +63,60 @@ export default function App() {
 
   return (
     <div className="app-container">
-      {/* Top Header */}
-      <header className="app-header">
-        <div className="header-brand">
-          <div className="brand-title-row">
-            <h1>Secure Notes</h1>
-            <span className="version-badge">Backend Assessment</span>
+      {/* Top Navbar */}
+      <header className="app-navbar">
+        <div className="navbar-brand">
+          <div className="brand-logo-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+            </svg>
           </div>
-          <span className="app-subtitle">
-            Private note-taking with role-based security, optimized indexing, and MongoDB aggregations.
-          </span>
+          <div className="brand-title-group">
+            <span className="brand-title">Secure Notes</span>
+            <span className="version-badge">Assessment</span>
+          </div>
         </div>
 
-        <div className="header-actions">
+        <div className="navbar-actions">
           <button
-            className={`btn btn-sm ${showcaseOpen ? 'btn-primary' : 'btn-outline'}`}
+            type="button"
+            className={`btn btn-sm ${showcaseOpen ? 'btn-primary' : 'btn-secondary'}`}
             onClick={() => setShowcaseOpen(!showcaseOpen)}
           >
             {showcaseOpen ? (
               <>
-                <IconClose size={15} /> Close Showcase
+                <IconClose size={14} /> Close Showcase
               </>
             ) : (
               <>
-                <IconShowcase size={15} /> Task Showcase & Process
+                <IconShowcase size={14} /> Task Showcase &amp; Process
               </>
             )}
           </button>
 
           {user && (
-            <div className="user-profile-header">
-              <div className="user-details">
-                <span className="username">{user.username}</span>
-                <span className="user-email">{user.email}</span>
+            <div className="user-account-chip">
+              <div className="user-avatar-pill">
+                {user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+              </div>
+              <div className="user-meta-stack">
+                <span className="user-account-name">{user.username}</span>
+                <span className="user-account-email">{user.email}</span>
               </div>
               <span className={`badge ${user.role === 'admin' ? 'badge-admin' : 'badge-user'}`}>
                 {user.role}
               </span>
-              <button className="btn btn-sm btn-secondary" onClick={handleLogout} title="Log out">
-                <IconLogout size={14} /> Logout
+              <button
+                type="button"
+                className="user-logout-btn"
+                onClick={handleLogout}
+                title="Log out of account"
+              >
+                <IconLogout size={14} />
+                <span>Logout</span>
               </button>
             </div>
           )}
