@@ -171,13 +171,6 @@ export default function App() {
           </>
         )}
       </main>
-
-      {/* Footer */}
-      <footer className="app-footer">
-        <p>
-          Technical Interview Task &bull; Built with Node.js, Express, MongoDB with Mongoose, and React.
-        </p>
-      </footer>
     </div>
   );
 }
