@@ -2,6 +2,11 @@
 
 A clean, secure note-taking REST API and modern frontend built for the **Backend Developer Technical Assessment**. The project demonstrates secure authentication, role-based access control, zero-bloat database indexing via the ESR rule, and MongoDB aggregation pipelines.
 
+### Live Deployments:
+- **Backend API (Render):** [`https://secure-notes-backend-gt01.onrender.com`](https://secure-notes-backend-gt01.onrender.com)
+  - Health check: [`https://secure-notes-backend-gt01.onrender.com/health`](https://secure-notes-backend-gt01.onrender.com/health)
+  - Aggregations Demo: [`https://secure-notes-backend-gt01.onrender.com/api/aggregations/group-by-interests`](https://secure-notes-backend-gt01.onrender.com/api/aggregations/group-by-interests)
+
 ---
 
 ## 1. System Architecture & Request Flow
@@ -269,7 +274,74 @@ npm run test:backend
 
 ---
 
-## 8. Automated Test Results
+## 8. Free-Tier Deployment Guide (Render + Vercel)
+
+This application is architected to deploy seamlessly onto free-tier cloud platforms.
+
+```mermaid
+flowchart LR
+    subgraph FrontendHosting["Frontend: Vercel Free Tier"]
+        Vercel["React SPA (Vite)<br/>Global Edge CDN<br/>Rewrites via vercel.json"]
+    end
+
+    subgraph BackendHosting["Backend: Render Free Tier"]
+        Render["Node.js / Express Web Service<br/>Port 5000 / Auto Assigned<br/>CORS Enabled"]
+    end
+
+    subgraph DatabaseHosting["Database: MongoDB Atlas"]
+        Atlas[("MongoDB Atlas M0 Free Cluster<br/>Auto-indexed via Mongoose")]
+    end
+
+    Vercel -->|"HTTPS API Requests<br/>VITE_API_URL"| Render
+    Render -->|"Encrypted TLS Driver Connection<br/>MONGODB_URI"| Atlas
+```
+
+### Step 1: Deploy Backend to Render (Free Web Service)
+
+1. Sign in to [render.com](https://render.com).
+2. Click **New +** $\rightarrow$ **Web Service**.
+3. Select your GitHub repository: `emonislive/notepad-assignment`.
+4. Configure service settings:
+   - **Name:** `secure-notes-backend` (or any unique name)
+   - **Branch:** `main`
+   - **Root Directory:** `backend`
+   - **Runtime:** `Node`
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+   - **Instance Type:** `Free`
+5. Under **Environment Variables**, add:
+   - `NODE_ENV`: `production`
+   - `PORT`: `5000`
+   - `MONGODB_URI`: `<your MongoDB Atlas connection string>`
+   - `JWT_SECRET`: `<a secure random string>`
+6. Click **Deploy Web Service**.
+7. Once deployed, copy your Render URL (e.g. `https://secure-notes-backend.onrender.com`).
+
+> [!NOTE]
+> Render free-tier instances spin down after 15 minutes of inactivity and take ~30–50 seconds to wake up on the first incoming request. The frontend includes built-in retry messaging to handle cold starts gracefully.
+
+---
+
+### Step 2: Deploy Frontend to Vercel (Free Hobby Tier)
+
+1. Sign in to [vercel.com](https://vercel.com).
+2. Click **Add New...** $\rightarrow$ **Project**.
+3. Import your GitHub repository: `emonislive/notepad-assignment`.
+4. In the Project Configuration screen:
+   - **Framework Preset:** `Vite`
+   - **Root Directory:** Click **Edit** and choose `frontend`
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist`
+   - **Install Command:** `npm install`
+5. Expand **Environment Variables** and add:
+   - **Key:** `VITE_API_URL`
+   - **Value:** `https://your-backend-app.onrender.com` *(paste your Render backend URL from Step 1)*
+6. Click **Deploy**.
+7. Your frontend will be live on a `*.vercel.app` domain with instant HTTPS and SPA routing pre-configured via `vercel.json`.
+
+---
+
+## 9. Automated Test Results
 
 ```
 PASS tests/schema-indexing.test.js
@@ -287,7 +359,7 @@ Time:        4.898 s
 
 ---
 
-## 9. API Endpoints Reference
+## 10. API Endpoints Reference
 
 ### Authentication
 - `POST /api/auth/register` - Create account (`username`, `email`, `password`, `role`, `interests`)

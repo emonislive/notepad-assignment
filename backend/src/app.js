@@ -15,7 +15,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health check endpoint
+// Health check & root endpoints (supports Render / Vercel uptime checks)
+app.get('/', (req, res) => {
+  res.status(200).json({ status: 'ok', message: 'Secure Notes API is running', timestamp: new Date() });
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', uptime: process.uptime(), timestamp: new Date() });
+});
+
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', uptime: process.uptime(), timestamp: new Date() });
 });
