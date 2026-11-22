@@ -134,8 +134,8 @@ export default function AdminUsers({ currentUser }) {
     <div className="admin-container">
       <div className="section-header">
         <div>
-          <h2>Admin: User Management</h2>
-          <p className="subtitle">Manage user accounts, roles, and permissions</p>
+          <h2>User Management</h2>
+          <p className="subtitle">Add, update, and manage accounts and permission roles.</p>
         </div>
       </div>
 

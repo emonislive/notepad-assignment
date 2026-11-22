@@ -90,9 +90,9 @@ export default function Posts({ currentUser }) {
     <div className="posts-container">
       <div className="section-header">
         <div>
-          <h2>Community Posts & Aggregation Scenario 2</h2>
+          <h2>Community Posts</h2>
           <p className="subtitle">
-            Users can write posts visible to everyone. Retrieve posts per user using a single aggregation pipeline with a $lookup stage.
+            Public notes and updates shared by users. Demonstrates MongoDB <code>$lookup</code> aggregation by filtering posts by author.
           </p>
         </div>
       </div>
@@ -102,12 +102,12 @@ export default function Posts({ currentUser }) {
 
       {/* Write Post Card */}
       <div className="card">
-        <h3>Publish a Post</h3>
+        <h3>Share a Post</h3>
         <form onSubmit={handleCreatePost}>
           <div className="form-group">
             <input
               type="text"
-              placeholder="Post Title"
+              placeholder="Post title..."
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}

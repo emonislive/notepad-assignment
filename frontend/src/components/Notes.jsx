@@ -112,11 +112,11 @@ export default function Notes({ user }) {
       {/* Header and Controls */}
       <div className="section-header">
         <div>
-          <h2>Notes Management</h2>
+          <h2>Notes</h2>
           <p className="subtitle">
             {viewAll
-              ? "Viewing all users' notes (Admin Access)"
-              : 'Viewing your personal notes'}
+              ? "Showing notes from all users across the platform (Admin privilege)"
+              : 'Your private, personal notes'}
           </p>
         </div>
 
@@ -131,7 +131,7 @@ export default function Notes({ user }) {
                   setPage(1);
                 }}
               />
-              <span>View Everyone's Notes (Admin Privilege)</span>
+              <span>View everyone's notes</span>
             </label>
           </div>
         )}
@@ -142,12 +142,12 @@ export default function Notes({ user }) {
 
       {/* Create Note Card */}
       <div className="card note-create-card">
-        <h3>Create New Note</h3>
+        <h3>Write a Note</h3>
         <form onSubmit={handleCreate}>
           <div className="form-group">
             <input
               type="text"
-              placeholder="Note Title"
+              placeholder="Note title..."
               required
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
@@ -155,7 +155,7 @@ export default function Notes({ user }) {
           </div>
           <div className="form-group">
             <textarea
-              placeholder="Write your note content here..."
+              placeholder="Write your note here..."
               rows="3"
               required
               value={newContent}
@@ -163,7 +163,7 @@ export default function Notes({ user }) {
             ></textarea>
           </div>
           <button type="submit" className="btn btn-primary" disabled={createLoading}>
-            {createLoading ? 'Saving...' : 'Create Note'}
+            {createLoading ? 'Saving...' : 'Save Note'}
           </button>
         </form>
       </div>

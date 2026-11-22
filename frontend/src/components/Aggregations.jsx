@@ -29,13 +29,13 @@ export default function Aggregations() {
     <div className="aggregations-container">
       <div className="section-header">
         <div>
-          <h2>Aggregation Scenario 1: Group by Interests</h2>
+          <h2>Explore by Interests</h2>
           <p className="subtitle">
-            Displays all users grouped by their profile interests using a single <code>collection.aggregate()</code> pipeline ($unwind &rarr; $group &rarr; $sort).
+            Users grouped by shared profile interests (e.g. chess, reading, coding). Generated using a single MongoDB <code>collection.aggregate()</code> pipeline.
           </p>
         </div>
         <button className="btn btn-secondary" onClick={fetchInterestGroups} disabled={loading}>
-          {loading ? 'Refreshing...' : 'Refresh Aggregation'}
+          {loading ? 'Refreshing...' : 'Refresh'}
         </button>
       </div>
 
