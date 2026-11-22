@@ -45,25 +45,25 @@ export default function TaskShowcase() {
           className={`showcase-tab ${activeVisualTab === 'process' ? 'active' : ''}`}
           onClick={() => setActiveVisualTab('process')}
         >
-          1. Development Process & Steps
+          1. Development Process
         </button>
         <button
           className={`showcase-tab ${activeVisualTab === 'indexing' ? 'active' : ''}`}
           onClick={() => setActiveVisualTab('indexing')}
         >
-          2. Database Indexing Strategy (ESR Rule)
+          2. Database Indexing (ESR)
         </button>
         <button
           className={`showcase-tab ${activeVisualTab === 'aggregations' ? 'active' : ''}`}
           onClick={() => setActiveVisualTab('aggregations')}
         >
-          3. Aggregation Pipelines Visualized
+          3. Aggregation Pipelines
         </button>
         <button
           className={`showcase-tab ${activeVisualTab === 'rbac' ? 'active' : ''}`}
           onClick={() => setActiveVisualTab('rbac')}
         >
-          4. Security & Access Control Flow
+          4. Security & Access Control
         </button>
       </div>
 

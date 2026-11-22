@@ -236,14 +236,15 @@ code, pre {
    ========================================================================== */
 
 .tab-nav {
-  display: inline-flex;
-  gap: 0.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
   background-color: var(--surface-secondary);
   padding: 0.3rem;
   border-radius: var(--radius-md);
   margin-bottom: 2rem;
   border: 1px solid var(--border);
-  overflow-x: auto;
+  width: fit-content;
   max-width: 100%;
 }
 
@@ -1263,21 +1264,22 @@ input::placeholder, textarea::placeholder {
 
 /* Showcase Sub-Tabs */
 .showcase-tabs {
-  display: inline-flex;
-  gap: 0.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
   background-color: var(--surface-secondary);
-  padding: 0.3rem;
+  padding: 0.35rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
-  overflow-x: auto;
+  align-self: flex-start;
   max-width: 100%;
 }
 
 .showcase-tab {
   background: transparent;
   border: 1px solid transparent;
-  padding: 0.5rem 0.95rem;
-  font-size: 0.85rem;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.825rem;
   font-weight: 500;
   color: var(--text-secondary);
   cursor: pointer;
