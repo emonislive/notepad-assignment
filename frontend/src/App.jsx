@@ -5,6 +5,7 @@ import AdminUsers from './components/AdminUsers';
 import Posts from './components/Posts';
 import Aggregations from './components/Aggregations';
 import TaskShowcase from './components/TaskShowcase';
+import { IconNotes, IconPosts, IconInterests, IconUsers, IconShowcase, IconClose, IconLogout } from './components/Icons';
 import { apiRequest } from './api/client';
 
 export default function App() {
@@ -79,7 +80,15 @@ export default function App() {
             className={`btn btn-sm ${showcaseOpen ? 'btn-primary' : 'btn-outline'}`}
             onClick={() => setShowcaseOpen(!showcaseOpen)}
           >
-            {showcaseOpen ? '✕ Close Showcase' : '✨ Process & Task Showcase'}
+            {showcaseOpen ? (
+              <>
+                <IconClose size={15} /> Close Showcase
+              </>
+            ) : (
+              <>
+                <IconShowcase size={15} /> Task Showcase & Process
+              </>
+            )}
           </button>
 
           {user && (
@@ -91,8 +100,8 @@ export default function App() {
               <span className={`badge ${user.role === 'admin' ? 'badge-admin' : 'badge-user'}`}>
                 {user.role}
               </span>
-              <button className="btn btn-sm btn-secondary" onClick={handleLogout}>
-                Logout
+              <button className="btn btn-sm btn-secondary" onClick={handleLogout} title="Log out">
+                <IconLogout size={14} /> Logout
               </button>
             </div>
           )}
@@ -113,26 +122,26 @@ export default function App() {
                 className={`tab-btn ${activeTab === 'notes' ? 'active' : ''}`}
                 onClick={() => setActiveTab('notes')}
               >
-                My Notes
+                <IconNotes size={16} /> My Notes
               </button>
               <button
                 className={`tab-btn ${activeTab === 'posts' ? 'active' : ''}`}
                 onClick={() => setActiveTab('posts')}
               >
-                Community Posts
+                <IconPosts size={16} /> Community Posts
               </button>
               <button
                 className={`tab-btn ${activeTab === 'aggregations' ? 'active' : ''}`}
                 onClick={() => setActiveTab('aggregations')}
               >
-                Explore Interests
+                <IconInterests size={16} /> Explore Interests
               </button>
               {user.role === 'admin' && (
                 <button
                   className={`tab-btn ${activeTab === 'admin' ? 'active' : ''}`}
                   onClick={() => setActiveTab('admin')}
                 >
-                  Manage Users
+                  <IconUsers size={16} /> Manage Users
                 </button>
               )}
             </nav>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { apiRequest } from '../api/client';
+import { IconPlus, IconEdit, IconTrash, IconCheck } from './Icons';
 
 export default function AdminUsers({ currentUser }) {
   const [users, setUsers] = useState([]);
@@ -185,8 +186,8 @@ export default function AdminUsers({ currentUser }) {
                 value={newUser.role}
                 onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
               >
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
+                <option value="user">User (Standard)</option>
+                <option value="admin">Admin (Full Access)</option>
               </select>
             </div>
           </div>
@@ -200,7 +201,7 @@ export default function AdminUsers({ currentUser }) {
             />
           </div>
           <button type="submit" className="btn btn-primary" disabled={addLoading}>
-            {addLoading ? 'Adding...' : 'Add User'}
+            <IconPlus size={15} /> {addLoading ? 'Adding...' : 'Add User'}
           </button>
         </form>
       </div>
@@ -208,7 +209,7 @@ export default function AdminUsers({ currentUser }) {
       {/* Users Table */}
       <div className="card" style={{ marginTop: '1.5rem' }}>
         <h3>
-          All Users <span className="badge">Total: {pagination.totalCount}</span>
+          All Users <span className="badge badge-accent">Total: {pagination.totalCount}</span>
         </h3>
 
         {loading ? (
@@ -271,7 +272,7 @@ export default function AdminUsers({ currentUser }) {
                               className="btn btn-sm btn-primary"
                               onClick={() => handleUpdateUser(u._id)}
                             >
-                              Save
+                              <IconCheck size={13} /> Save
                             </button>
                             <button className="btn btn-sm btn-secondary" onClick={cancelEdit}>
                               Cancel
@@ -280,7 +281,7 @@ export default function AdminUsers({ currentUser }) {
                         </>
                       ) : (
                         <>
-                          <td>{u.username}</td>
+                          <td><strong>{u.username}</strong></td>
                           <td>{u.email}</td>
                           <td>
                             <span className={`badge ${u.role === 'admin' ? 'badge-admin' : 'badge-user'}`}>
@@ -296,17 +297,20 @@ export default function AdminUsers({ currentUser }) {
                           </td>
                           <td>{new Date(u.createdAt).toLocaleDateString()}</td>
                           <td>
-                            <button className="btn btn-sm btn-outline" onClick={() => startEdit(u)}>
-                              Edit
-                            </button>
-                            {u._id !== currentUser._id && (
-                              <button
-                                className="btn btn-sm btn-danger"
-                                onClick={() => handleDeleteUser(u._id)}
-                              >
-                                Delete
+                            <div className="table-actions">
+                              <button className="btn btn-sm btn-outline" onClick={() => startEdit(u)} title="Edit user">
+                                <IconEdit size={13} /> Edit
                               </button>
-                            )}
+                              {u._id !== currentUser._id && (
+                                <button
+                                  className="btn btn-sm btn-danger"
+                                  onClick={() => handleDeleteUser(u._id)}
+                                  title="Delete user"
+                                >
+                                  <IconTrash size={13} /> Delete
+                                </button>
+                              )}
+                            </div>
                           </td>
                         </>
                       )}
@@ -326,7 +330,7 @@ export default function AdminUsers({ currentUser }) {
               disabled={!pagination.hasPrevPage}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
             >
-              &larr; Previous
+              Previous
             </button>
             <span className="page-indicator">
               Page {pagination.currentPage} of {pagination.totalPages}
@@ -336,7 +340,7 @@ export default function AdminUsers({ currentUser }) {
               disabled={!pagination.hasNextPage}
               onClick={() => setPage((p) => p + 1)}
             >
-              Next &rarr;
+              Next
             </button>
           </div>
         )}

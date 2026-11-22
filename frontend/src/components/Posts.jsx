@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { apiRequest } from '../api/client';
+import { IconPlus, IconInterests } from './Icons';
 
 export default function Posts({ currentUser }) {
   const [posts, setPosts] = useState([]);
@@ -123,7 +124,7 @@ export default function Posts({ currentUser }) {
             ></textarea>
           </div>
           <button type="submit" className="btn btn-primary" disabled={postLoading}>
-            {postLoading ? 'Publishing...' : 'Publish Post'}
+            <IconPlus size={15} /> {postLoading ? 'Publishing...' : 'Publish Post'}
           </button>
         </form>
       </div>
@@ -142,10 +143,10 @@ export default function Posts({ currentUser }) {
       )}
 
       {/* Posts Grid */}
-      <div className="notes-list-header" style={{ marginTop: '1.5rem' }}>
+      <div className="notes-list-header" style={{ marginTop: '2rem', marginBottom: '0.5rem' }}>
         <h3>
-          {selectedUserId ? "User's Filtered Posts" : 'All Posts'}{' '}
-          <span className="badge">
+          {selectedUserId ? "Author's Filtered Posts" : 'All Posts'}{' '}
+          <span className="badge badge-accent">
             Total: {aggregationInfo ? aggregationInfo.count : pagination.totalCount}
           </span>
         </h3>
@@ -182,7 +183,7 @@ export default function Posts({ currentUser }) {
                       title="Run Aggregation Scenario 2 ($lookup)"
                       onClick={() => fetchUserPostsViaLookup(authorId)}
                     >
-                      Filter by this Author ($lookup)
+                      <IconInterests size={13} /> Filter by Author ($lookup)
                     </button>
                   )}
                 </div>
@@ -192,7 +193,7 @@ export default function Posts({ currentUser }) {
         </div>
       )}
 
-      {/* Pagination (for normal list view) */}
+      {/* Pagination */}
       {!selectedUserId && pagination.totalPages > 1 && (
         <div className="pagination-bar">
           <button
@@ -200,7 +201,7 @@ export default function Posts({ currentUser }) {
             disabled={!pagination.hasPrevPage}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
           >
-            &larr; Previous
+            Previous
           </button>
           <span className="page-indicator">
             Page {pagination.currentPage} of {pagination.totalPages}
@@ -210,7 +211,7 @@ export default function Posts({ currentUser }) {
             disabled={!pagination.hasNextPage}
             onClick={() => setPage((p) => p + 1)}
           >
-            Next &rarr;
+            Next
           </button>
         </div>
       )}

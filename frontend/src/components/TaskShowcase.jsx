@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { IconShield, IconDatabase, IconLayers, IconCheck, IconArrowRight, IconClose } from './Icons';
 
 export default function TaskShowcase() {
   const [activeVisualTab, setActiveVisualTab] = useState('process');
@@ -79,13 +80,13 @@ export default function TaskShowcase() {
             <div className="timeline-item">
               <div className="timeline-dot">1</div>
               <div className="timeline-content">
-                <div className="step-tag">Phase 1 &bull; Requirements & Security</div>
+                <div className="step-tag">Phase 1: Requirements & Security</div>
                 <h4>Assessment Review & Authentication Setup</h4>
                 <p>
                   Analyzed all assessment requirements from the examiner. Chose Node.js with Express & Mongoose to satisfy the mandatory <code>schema.index</code> requirement. Implemented stateless JWT authentication and bcrypt password hashing with automatic salt generation and JSON password stripping.
                 </p>
                 <div className="code-snippet-tag">
-                  Applied: <code>pre('save')</code> hook &bull; <code>bcrypt.hash(password, 10)</code> &bull; <code>toJSON()</code> suppression
+                  Applied: <code>pre('save')</code> hook | <code>bcrypt.hash(password, 10)</code> | <code>toJSON()</code> suppression
                 </div>
               </div>
             </div>
@@ -94,13 +95,13 @@ export default function TaskShowcase() {
             <div className="timeline-item">
               <div className="timeline-dot">2</div>
               <div className="timeline-content">
-                <div className="step-tag">Phase 2 &bull; Database Engineering</div>
+                <div className="step-tag">Phase 2: Database Engineering</div>
                 <h4>Zero-Bloat Indexing via schema.index</h4>
                 <p>
                   Adhered strictly to the constraint: <em>"DO NOT MAKE ANY UNNECESSARY INDEXES"</em>. Applied MongoDB's <strong>Equality-Sort-Range (ESR)</strong> rule. Created compound indexes for sorted list operations to guarantee index-covered queries without expensive in-memory sorting.
                 </p>
                 <div className="code-snippet-tag">
-                  Applied: <code>Note: &#123; owner: 1, createdAt: -1 &#125;</code> &bull; <code>User: &#123; interests: 1 &#125;</code> &bull; <code>Post: &#123; author: 1, createdAt: -1 &#125;</code>
+                  Applied: <code>Note: &#123; owner: 1, createdAt: -1 &#125;</code> | <code>User: &#123; interests: 1 &#125;</code> | <code>Post: &#123; author: 1, createdAt: -1 &#125;</code>
                 </div>
               </div>
             </div>
@@ -109,13 +110,13 @@ export default function TaskShowcase() {
             <div className="timeline-item">
               <div className="timeline-dot">3</div>
               <div className="timeline-content">
-                <div className="step-tag">Phase 3 &bull; Aggregations & API</div>
+                <div className="step-tag">Phase 3: Aggregations & API</div>
                 <h4>MongoDB Aggregation Pipelines & Pagination</h4>
                 <p>
                   Built the two required aggregation pipelines: Scenario 1 (users grouped by interests using <code>$unwind</code> and <code>$group</code> in a single call) and Scenario 2 (user posts retrieved via <code>$lookup</code> foreign join). Added standardized limit/skip pagination across all list endpoints.
                 </p>
                 <div className="code-snippet-tag">
-                  Applied: <code>User.aggregate()</code> &bull; <code>Post.aggregate()</code> with <code>$lookup</code> &bull; <code>parsePagination()</code>
+                  Applied: <code>User.aggregate()</code> | <code>Post.aggregate()</code> with <code>$lookup</code> | <code>parsePagination()</code>
                 </div>
               </div>
             </div>
@@ -124,13 +125,13 @@ export default function TaskShowcase() {
             <div className="timeline-item">
               <div className="timeline-dot">4</div>
               <div className="timeline-content">
-                <div className="step-tag">Phase 4 &bull; Verification & UI</div>
+                <div className="step-tag">Phase 4: Verification & UI</div>
                 <h4>Automated Testing & Minimalist Interface</h4>
                 <p>
                   Developed 6 automated Jest test suites covering 23 test cases verifying index declarations, security, RBAC guards, and pipeline stages. Built this clean, functional React application for live testing and interview demonstration.
                 </p>
                 <div className="code-snippet-tag">
-                  Applied: <code>Jest (23 tests passed)</code> &bull; <code>Vite React</code> &bull; <code>decision.md interview notes</code>
+                  Applied: <code>Jest (23 tests passed)</code> | <code>Vite React</code> | <code>decision.md interview notes</code>
                 </div>
               </div>
             </div>
@@ -178,7 +179,7 @@ export default function TaskShowcase() {
               <div className="index-item highlighted-index">
                 <div className="index-signature">schema.index(&#123; owner: 1, createdAt: -1 &#125;)</div>
                 <div className="index-desc">
-                  <strong>ESR Compound Index:</strong> Regular users query their own notes sorted newest first. The index satisfies equality (<code>owner</code>) and sort (<code>createdAt</code>) in a single B-tree traversal!
+                  <strong>ESR Compound Index:</strong> Regular users query their own notes sorted newest first. The index satisfies equality (<code>owner</code>) and sort (<code>createdAt</code>) in a single B-tree traversal.
                 </div>
               </div>
               <div className="index-item">
@@ -238,7 +239,9 @@ export default function TaskShowcase() {
                 </div>
               </div>
 
-              <div className="pipeline-arrow">&rarr;</div>
+              <div className="pipeline-arrow">
+                <IconArrowRight size={18} />
+              </div>
 
               <div className="pipeline-stage">
                 <div className="stage-num">Stage 1</div>
@@ -251,7 +254,9 @@ export default function TaskShowcase() {
                 </div>
               </div>
 
-              <div className="pipeline-arrow">&rarr;</div>
+              <div className="pipeline-arrow">
+                <IconArrowRight size={18} />
+              </div>
 
               <div className="pipeline-stage">
                 <div className="stage-num">Stage 2 & 3</div>
@@ -283,7 +288,9 @@ export default function TaskShowcase() {
                 </div>
               </div>
 
-              <div className="pipeline-arrow">&rarr;</div>
+              <div className="pipeline-arrow">
+                <IconArrowRight size={18} />
+              </div>
 
               <div className="pipeline-stage">
                 <div className="stage-num">Stage 2: $lookup</div>
@@ -295,7 +302,9 @@ export default function TaskShowcase() {
                 </div>
               </div>
 
-              <div className="pipeline-arrow">&rarr;</div>
+              <div className="pipeline-arrow">
+                <IconArrowRight size={18} />
+              </div>
 
               <div className="pipeline-stage">
                 <div className="stage-num">Stage 3 & 4</div>
@@ -323,11 +332,13 @@ export default function TaskShowcase() {
               <code>Authorization: Bearer &lt;JWT&gt;</code>
             </div>
 
-            <div className="rbac-arrow-down">&darr;</div>
+            <div className="rbac-arrow-down">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            </div>
 
             <div className="rbac-middleware-box">
               <span className="step-label">Middleware: authenticate</span>
-              <p>Verifies signature with <code>JWT_SECRET</code> &bull; Extracts <code>decoded.id</code> &bull; Attaches <code>req.user</code></p>
+              <p>Verifies signature with <code>JWT_SECRET</code> | Extracts <code>decoded.id</code> | Attaches <code>req.user</code></p>
             </div>
 
             <div className="rbac-split-arrows">
@@ -336,13 +347,13 @@ export default function TaskShowcase() {
                 <div className="permission-card">
                   <h5>Standard User Capabilities</h5>
                   <ul>
-                    <li>&check; Create personal notes</li>
-                    <li>&check; View own notes with pagination</li>
-                    <li>&check; Update own notes</li>
-                    <li>&check; Delete own notes</li>
-                    <li>&check; Write public posts</li>
-                    <li>&times; <em>Cannot view other users' notes (403 Forbidden)</em></li>
-                    <li>&times; <em>Cannot manage user accounts (403 Forbidden)</em></li>
+                    <li><span className="check-icon"><IconCheck size={13} /></span> Create personal notes</li>
+                    <li><span className="check-icon"><IconCheck size={13} /></span> View own notes with pagination</li>
+                    <li><span className="check-icon"><IconCheck size={13} /></span> Update own notes</li>
+                    <li><span className="check-icon"><IconCheck size={13} /></span> Delete own notes</li>
+                    <li><span className="check-icon"><IconCheck size={13} /></span> Write public posts</li>
+                    <li className="forbidden-item"><span className="cross-icon"><IconClose size={13} /></span> Cannot view other users' notes (403 Forbidden)</li>
+                    <li className="forbidden-item"><span className="cross-icon"><IconClose size={13} /></span> Cannot manage user accounts (403 Forbidden)</li>
                   </ul>
                 </div>
               </div>
@@ -352,12 +363,12 @@ export default function TaskShowcase() {
                 <div className="permission-card admin-border">
                   <h5>Admin Capabilities (Inherits User + Extras)</h5>
                   <ul>
-                    <li>&check; Inherits all User capabilities</li>
-                    <li>&check; <strong>View everyone's notes</strong> (via <code>?all=true</code>)</li>
-                    <li>&check; <strong>Add new users</strong> (<code>POST /api/users</code>)</li>
-                    <li>&check; <strong>Update any user</strong> (<code>PUT /api/users/:id</code>)</li>
-                    <li>&check; <strong>Remove any user</strong> (<code>DELETE /api/users/:id</code>)</li>
-                    <li>&check; <strong>List all users</strong> with pagination</li>
+                    <li><span className="check-icon"><IconCheck size={13} /></span> Inherits all User capabilities</li>
+                    <li><span className="check-icon"><IconCheck size={13} /></span> <strong>View everyone's notes</strong> (via <code>?all=true</code>)</li>
+                    <li><span className="check-icon"><IconCheck size={13} /></span> <strong>Add new users</strong> (<code>POST /api/users</code>)</li>
+                    <li><span className="check-icon"><IconCheck size={13} /></span> <strong>Update any user</strong> (<code>PUT /api/users/:id</code>)</li>
+                    <li><span className="check-icon"><IconCheck size={13} /></span> <strong>Remove any user</strong> (<code>DELETE /api/users/:id</code>)</li>
+                    <li><span className="check-icon"><IconCheck size={13} /></span> <strong>List all users</strong> with pagination</li>
                   </ul>
                 </div>
               </div>

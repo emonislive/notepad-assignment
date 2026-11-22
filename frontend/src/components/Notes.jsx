@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { apiRequest } from '../api/client';
+import { IconPlus, IconEdit, IconTrash, IconCheck } from './Icons';
 
 export default function Notes({ user }) {
   const [notes, setNotes] = useState([]);
@@ -163,16 +164,16 @@ export default function Notes({ user }) {
             ></textarea>
           </div>
           <button type="submit" className="btn btn-primary" disabled={createLoading}>
-            {createLoading ? 'Saving...' : 'Save Note'}
+            <IconPlus size={15} /> {createLoading ? 'Saving...' : 'Save Note'}
           </button>
         </form>
       </div>
 
       {/* Notes List */}
-      <div className="notes-list-header">
+      <div className="notes-list-header" style={{ marginTop: '2rem', marginBottom: '0.5rem' }}>
         <h3>
           {viewAll ? 'All Notes' : 'My Notes'}{' '}
-          <span className="badge">Total: {pagination.totalCount}</span>
+          <span className="badge badge-accent">Total: {pagination.totalCount}</span>
         </h3>
       </div>
 
@@ -206,7 +207,7 @@ export default function Notes({ user }) {
                     ></textarea>
                     <div className="note-actions">
                       <button className="btn btn-sm btn-primary" onClick={() => handleUpdate(note._id)}>
-                        Save
+                        <IconCheck size={14} /> Save
                       </button>
                       <button className="btn btn-sm btn-secondary" onClick={cancelEdit}>
                         Cancel
@@ -234,14 +235,16 @@ export default function Notes({ user }) {
                             <button
                               className="btn btn-sm btn-outline"
                               onClick={() => startEdit(note)}
+                              title="Edit note"
                             >
-                              Edit
+                              <IconEdit size={14} /> Edit
                             </button>
                             <button
                               className="btn btn-sm btn-danger"
                               onClick={() => handleDelete(note._id)}
+                              title="Delete note"
                             >
-                              Delete
+                              <IconTrash size={14} /> Delete
                             </button>
                           </>
                         )}
@@ -263,7 +266,7 @@ export default function Notes({ user }) {
             disabled={!pagination.hasPrevPage}
             onClick={() => setPage((p) => Math.max(1, p - 1))}
           >
-            &larr; Previous
+            Previous
           </button>
           <span className="page-indicator">
             Page {pagination.currentPage} of {pagination.totalPages}
@@ -273,7 +276,7 @@ export default function Notes({ user }) {
             disabled={!pagination.hasNextPage}
             onClick={() => setPage((p) => p + 1)}
           >
-            Next &rarr;
+            Next
           </button>
         </div>
       )}
