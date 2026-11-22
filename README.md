@@ -3,6 +3,7 @@
 A clean, secure note-taking REST API and modern frontend built for the **Backend Developer Technical Assessment**. The project demonstrates secure authentication, role-based access control, zero-bloat database indexing via the ESR rule, and MongoDB aggregation pipelines.
 
 ### Live Deployments:
+- **Live Frontend (Vercel):** [`https://notepad-assignment-coral.vercel.app/`](https://notepad-assignment-coral.vercel.app/)
 - **Backend API (Render):** [`https://secure-notes-backend-gt01.onrender.com`](https://secure-notes-backend-gt01.onrender.com)
   - Health check: [`https://secure-notes-backend-gt01.onrender.com/health`](https://secure-notes-backend-gt01.onrender.com/health)
   - Aggregations Demo: [`https://secure-notes-backend-gt01.onrender.com/api/aggregations/group-by-interests`](https://secure-notes-backend-gt01.onrender.com/api/aggregations/group-by-interests)
