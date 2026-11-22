@@ -270,11 +270,15 @@ code, pre {
 }
 
 .tab-btn.active {
-  background-color: var(--surface);
-  color: var(--text-primary);
+  background-color: #18181b;
+  color: #ffffff;
   font-weight: 600;
-  border-color: rgba(0, 0, 0, 0.04);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border-color: #18181b;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.tab-btn.active svg {
+  stroke: #ffffff;
 }
 
 /* ==========================================================================
@@ -1289,10 +1293,10 @@ input::placeholder, textarea::placeholder {
 }
 
 .showcase-tab.active {
-  color: var(--text-primary);
-  background: var(--surface);
-  border-color: rgba(0, 0, 0, 0.04);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  color: #ffffff;
+  background-color: #18181b;
+  border-color: #18181b;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
   font-weight: 600;
 }
 
