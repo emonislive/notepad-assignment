@@ -42,39 +42,52 @@ export default function Aggregations() {
       {error && <div className="alert alert-error">{error}</div>}
 
       <div className="pipeline-info card">
-        <h4>Pipeline Details</h4>
-        <p><strong>Query Execution:</strong> Single <code>User.aggregate()</code> call</p>
-        <p><strong>Stages:</strong> <code>$unwind: '$interests'</code> &rarr; <code>$group: &#123; _id: '$interests', count: &#123; $sum: 1 &#125;, users: &#123; $push: ... &#125; &#125;</code> &rarr; <code>$sort: &#123; _id: 1 &#125;</code></p>
-        <p><strong>Supporting Index:</strong> <code>userSchema.index(&#123; interests: 1 &#125;)</code> (multikey index)</p>
-        <p><strong>Distinct Interests Found:</strong> <span className="badge">{totalInterests}</span></p>
+        <div className="pipeline-header-row">
+          <h4>MongoDB Aggregation Pipeline</h4>
+          <span className="badge">{totalInterests} Distinct Interests</span>
+        </div>
+        <p className="pipeline-stage-text">
+          <code>$unwind: '$interests'</code> &rarr; <code>$group: &#123; _id: '$interests', count: &#123; $sum: 1 &#125;, users: &#123; $push: ... &#125; &#125;</code> &rarr; <code>$sort: &#123; _id: 1 &#125;</code>
+        </p>
+        <div className="pipeline-meta">
+          <span>Supported by multikey index: <code>userSchema.index(&#123; interests: 1 &#125;)</code></span>
+        </div>
       </div>
 
       {loading ? (
         <p className="loading-text">Executing aggregation pipeline...</p>
       ) : data.length === 0 ? (
         <div className="empty-state">
-          <p>No interests found across user profiles. Add users with interests in the Admin tab or during registration!</p>
+          <p>No interests found across user profiles. Add users with interests in the Admin tab or during registration.</p>
         </div>
       ) : (
         <div className="interests-grid">
           {data.map((group) => (
-            <div key={group._id} className="card interest-card">
+            <div key={group._id} className="interest-card">
               <div className="interest-header">
-                <span className="interest-title">{group._id}</span>
-                <span className="badge badge-count">{group.count} {group.count === 1 ? 'user' : 'users'}</span>
+                <h3 className="interest-title">{group._id}</h3>
+                <span className="badge badge-count">
+                  {group.count} {group.count === 1 ? 'member' : 'members'}
+                </span>
               </div>
               <div className="interest-users-list">
-                <h5>Users with this interest:</h5>
-                <ul>
+                <span className="interest-users-label">Users with this interest</span>
+                <div className="interest-users-group">
                   {group.users.map((u) => (
-                    <li key={u._id} className="interest-user-item">
-                      <strong>{u.username}</strong> ({u.email})
-                      <span className={`badge ${u.role === 'admin' ? 'badge-admin' : 'badge-user'}`} style={{ marginLeft: '8px' }}>
+                    <div key={u._id} className="interest-user-item">
+                      <div className="user-avatar-initial">
+                        {u.username ? u.username.charAt(0).toUpperCase() : 'U'}
+                      </div>
+                      <div className="user-info-column">
+                        <span className="user-name">{u.username}</span>
+                        <span className="user-email-muted">{u.email}</span>
+                      </div>
+                      <span className={`badge ${u.role === 'admin' ? 'badge-admin' : 'badge-user'}`}>
                         {u.role}
                       </span>
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
           ))}

@@ -360,7 +360,7 @@ export default function TaskShowcase() {
 
               <div className="split-right">
                 <span className="role-tag role-admin">Role: 'admin'</span>
-                <div className="permission-card admin-border">
+                <div className="permission-card">
                   <h5>Admin Capabilities (Inherits User + Extras)</h5>
                   <ul>
                     <li><span className="check-icon"><IconCheck size={13} /></span> Inherits all User capabilities</li>
