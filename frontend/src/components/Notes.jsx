@@ -1,0 +1,282 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { apiRequest } from '../api/client';
+
+export default function Notes({ user }) {
+  const [notes, setNotes] = useState([]);
+  const [pagination, setPagination] = useState({ currentPage: 1, totalPages: 1, totalCount: 0 });
+  const [page, setPage] = useState(1);
+  const [viewAll, setViewAll] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  // Create note form state
+  const [newTitle, setNewTitle] = useState('');
+  const [newContent, setNewContent] = useState('');
+  const [createLoading, setCreateLoading] = useState(false);
+
+  // Edit note state
+  const [editingNoteId, setEditingNoteId] = useState(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editContent, setEditContent] = useState('');
+
+  const fetchNotes = useCallback(async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const query = new URLSearchParams({
+        page: String(page),
+        limit: '6',
+        ...(user.role === 'admin' && viewAll ? { all: 'true' } : {}),
+      });
+      const data = await apiRequest(`/notes?${query.toString()}`);
+      setNotes(data.data || []);
+      setPagination(data.pagination || { currentPage: 1, totalPages: 1, totalCount: 0 });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, viewAll, user.role]);
+
+  useEffect(() => {
+    fetchNotes();
+  }, [fetchNotes]);
+
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+    setCreateLoading(true);
+    try {
+      await apiRequest('/notes', {
+        method: 'POST',
+        body: JSON.stringify({ title: newTitle, content: newContent }),
+      });
+      setNewTitle('');
+      setNewContent('');
+      setSuccess('Note created successfully!');
+      fetchNotes();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setCreateLoading(false);
+    }
+  };
+
+  const startEdit = (note) => {
+    setEditingNoteId(note._id);
+    setEditTitle(note.title);
+    setEditContent(note.content);
+  };
+
+  const cancelEdit = () => {
+    setEditingNoteId(null);
+    setEditTitle('');
+    setEditContent('');
+  };
+
+  const handleUpdate = async (noteId) => {
+    setError('');
+    setSuccess('');
+    try {
+      await apiRequest(`/notes/${noteId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ title: editTitle, content: editContent }),
+      });
+      setSuccess('Note updated successfully!');
+      cancelEdit();
+      fetchNotes();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleDelete = async (noteId) => {
+    if (!window.confirm('Are you sure you want to delete this note?')) return;
+    setError('');
+    setSuccess('');
+    try {
+      await apiRequest(`/notes/${noteId}`, {
+        method: 'DELETE',
+      });
+      setSuccess('Note deleted successfully!');
+      fetchNotes();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  return (
+    <div className="notes-container">
+      {/* Header and Controls */}
+      <div className="section-header">
+        <div>
+          <h2>Notes Management</h2>
+          <p className="subtitle">
+            {viewAll
+              ? "Viewing all users' notes (Admin Access)"
+              : 'Viewing your personal notes'}
+          </p>
+        </div>
+
+        {user.role === 'admin' && (
+          <div className="toggle-admin-notes">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={viewAll}
+                onChange={(e) => {
+                  setViewAll(e.target.checked);
+                  setPage(1);
+                }}
+              />
+              <span>View Everyone's Notes (Admin Privilege)</span>
+            </label>
+          </div>
+        )}
+      </div>
+
+      {error && <div className="alert alert-error">{error}</div>}
+      {success && <div className="alert alert-success">{success}</div>}
+
+      {/* Create Note Card */}
+      <div className="card note-create-card">
+        <h3>Create New Note</h3>
+        <form onSubmit={handleCreate}>
+          <div className="form-group">
+            <input
+              type="text"
+              placeholder="Note Title"
+              required
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <textarea
+              placeholder="Write your note content here..."
+              rows="3"
+              required
+              value={newContent}
+              onChange={(e) => setNewContent(e.target.value)}
+            ></textarea>
+          </div>
+          <button type="submit" className="btn btn-primary" disabled={createLoading}>
+            {createLoading ? 'Saving...' : 'Create Note'}
+          </button>
+        </form>
+      </div>
+
+      {/* Notes List */}
+      <div className="notes-list-header">
+        <h3>
+          {viewAll ? 'All Notes' : 'My Notes'}{' '}
+          <span className="badge">Total: {pagination.totalCount}</span>
+        </h3>
+      </div>
+
+      {loading ? (
+        <p className="loading-text">Loading notes...</p>
+      ) : notes.length === 0 ? (
+        <div className="empty-state">
+          <p>No notes found. Create your first note above!</p>
+        </div>
+      ) : (
+        <div className="notes-grid">
+          {notes.map((note) => {
+            const isOwner = note.owner?._id === user._id || note.owner === user._id;
+            const isEditing = editingNoteId === note._id;
+
+            return (
+              <div key={note._id} className="note-card">
+                {isEditing ? (
+                  <div className="note-edit-form">
+                    <input
+                      type="text"
+                      className="edit-input"
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                    />
+                    <textarea
+                      rows="4"
+                      className="edit-textarea"
+                      value={editContent}
+                      onChange={(e) => setEditContent(e.target.value)}
+                    ></textarea>
+                    <div className="note-actions">
+                      <button className="btn btn-sm btn-primary" onClick={() => handleUpdate(note._id)}>
+                        Save
+                      </button>
+                      <button className="btn btn-sm btn-secondary" onClick={cancelEdit}>
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="note-top">
+                      <h4 className="note-title">{note.title}</h4>
+                      {viewAll && note.owner && (
+                        <span className="note-author-tag">
+                          Owner: {note.owner.username || 'User'}
+                        </span>
+                      )}
+                    </div>
+                    <p className="note-content">{note.content}</p>
+                    <div className="note-footer">
+                      <small className="note-date">
+                        {new Date(note.createdAt).toLocaleString()}
+                      </small>
+                      <div className="note-actions">
+                        {(isOwner || user.role === 'admin') && (
+                          <>
+                            <button
+                              className="btn btn-sm btn-outline"
+                              onClick={() => startEdit(note)}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="btn btn-sm btn-danger"
+                              onClick={() => handleDelete(note._id)}
+                            >
+                              Delete
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Pagination Controls */}
+      {pagination.totalPages > 1 && (
+        <div className="pagination-bar">
+          <button
+            className="btn btn-secondary"
+            disabled={!pagination.hasPrevPage}
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+          >
+            &larr; Previous
+          </button>
+          <span className="page-indicator">
+            Page {pagination.currentPage} of {pagination.totalPages}
+          </span>
+          <button
+            className="btn btn-secondary"
+            disabled={!pagination.hasNextPage}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next &rarr;
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
