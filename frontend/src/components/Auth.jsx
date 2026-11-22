@@ -17,43 +17,55 @@ export default function Auth({ onLogin }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleQuickLogin = (email, password) => {
+    setFormData((prev) => ({ ...prev, email, password }));
+    doLogin(email, password);
+  };
+
+  const doLogin = async (email, password) => {
     setError('');
     setLoading(true);
-
     try {
-      if (isRegister) {
-        const payload = {
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-          role: formData.role,
-          interests: formData.interests
-            .split(',')
-            .map((s) => s.trim())
-            .filter(Boolean),
-        };
-        const data = await apiRequest('/auth/register', {
-          method: 'POST',
-          body: JSON.stringify(payload),
-        });
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        onLogin(data.user, data.token);
-      } else {
-        const payload = {
-          email: formData.email,
-          password: formData.password,
-        };
-        const data = await apiRequest('/auth/login', {
-          method: 'POST',
-          body: JSON.stringify(payload),
-        });
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        onLogin(data.user, data.token);
-      }
+      const data = await apiRequest('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      });
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      onLogin(data.user, data.token);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!isRegister) {
+      return doLogin(formData.email, formData.password);
+    }
+
+    setError('');
+    setLoading(true);
+    try {
+      const payload = {
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+        interests: formData.interests
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean),
+      };
+      const data = await apiRequest('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      onLogin(data.user, data.token);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -63,12 +75,14 @@ export default function Auth({ onLogin }) {
 
   return (
     <div className="card auth-card">
-      <h2>{isRegister ? 'Create Account' : 'Sign In'}</h2>
-      <p className="subtitle">
-        {isRegister
-          ? 'Register to create and manage your secure notes'
-          : 'Enter your credentials to access your notes'}
-      </p>
+      <div className="auth-header">
+        <h2>{isRegister ? 'Create an account' : 'Welcome back'}</h2>
+        <p className="subtitle">
+          {isRegister
+            ? 'Enter your details to create your secure notes account'
+            : 'Enter your credentials to access your workspace'}
+        </p>
+      </div>
 
       {error && <div className="alert alert-error">{error}</div>}
 
@@ -88,14 +102,14 @@ export default function Auth({ onLogin }) {
         )}
 
         <div className="form-group">
-          <label>Email Address</label>
+          <label>Email address</label>
           <input
             type="email"
             name="email"
             required
             value={formData.email}
             onChange={handleChange}
-            placeholder="e.g. user@example.com"
+            placeholder="name@example.com"
           />
         </div>
 
@@ -107,17 +121,17 @@ export default function Auth({ onLogin }) {
             required
             value={formData.password}
             onChange={handleChange}
-            placeholder="At least 6 characters"
+            placeholder="••••••••"
           />
         </div>
 
         {isRegister && (
           <>
             <div className="form-group">
-              <label>Role</label>
+              <label>Account Role</label>
               <select name="role" value={formData.role} onChange={handleChange}>
                 <option value="user">User (Standard Access)</option>
-                <option value="admin">Admin (Full User & Note Management)</option>
+                <option value="admin">Admin (Manage Users & View All Notes)</option>
               </select>
             </div>
 
@@ -130,29 +144,53 @@ export default function Auth({ onLogin }) {
                 onChange={handleChange}
                 placeholder="e.g. chess, reading, coding"
               />
-              <small className="help-text">Used for Aggregation Scenario 1 (group by interests)</small>
+              <span className="help-text">Used for Aggregation Scenario 1 (group by interests)</span>
             </div>
           </>
         )}
 
-        <button type="submit" className="btn btn-primary" disabled={loading}>
-          {loading ? 'Processing...' : isRegister ? 'Register Account' : 'Sign In'}
+        <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
+          {loading ? 'Please wait...' : isRegister ? 'Create Account' : 'Sign In'}
         </button>
       </form>
+
+      {!isRegister && (
+        <div className="quick-login-section">
+          <div className="divider">
+            <span>Or test with sample account</span>
+          </div>
+          <div className="quick-login-buttons">
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={() => handleQuickLogin('admin@example.com', 'password123')}
+            >
+              Sign in as Admin
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={() => handleQuickLogin('alice@example.com', 'password123')}
+            >
+              Sign in as Alice (User)
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="auth-toggle">
         {isRegister ? (
           <p>
             Already have an account?{' '}
             <button type="button" className="btn-link" onClick={() => setIsRegister(false)}>
-              Sign In here
+              Sign in
             </button>
           </p>
         ) : (
           <p>
             Don't have an account?{' '}
             <button type="button" className="btn-link" onClick={() => setIsRegister(true)}>
-              Register here
+              Register
             </button>
           </p>
         )}
