@@ -2,6 +2,17 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { apiRequest } from '../api/client';
 import { IconPlus, IconEdit, IconTrash, IconCheck } from './Icons';
 
+function formatNoteDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+}
+
 export default function Notes({ user }) {
   const [notes, setNotes] = useState([]);
   const [pagination, setPagination] = useState({ currentPage: 1, totalPages: 1, totalCount: 0 });
@@ -226,25 +237,27 @@ export default function Notes({ user }) {
                     </div>
                     <p className="note-content">{note.content}</p>
                     <div className="note-footer">
-                      <small className="note-date">
-                        {new Date(note.createdAt).toLocaleString()}
-                      </small>
+                      <span className="note-date">
+                        {formatNoteDate(note.createdAt)}
+                      </span>
                       <div className="note-actions">
                         {(isOwner || user.role === 'admin') && (
                           <>
                             <button
-                              className="btn btn-sm btn-outline"
+                              type="button"
+                              className="note-action-btn"
                               onClick={() => startEdit(note)}
                               title="Edit note"
                             >
-                              <IconEdit size={14} /> Edit
+                              <IconEdit size={13} /> Edit
                             </button>
                             <button
-                              className="btn btn-sm btn-danger"
+                              type="button"
+                              className="note-action-btn note-action-btn-danger"
                               onClick={() => handleDelete(note._id)}
                               title="Delete note"
                             >
-                              <IconTrash size={14} /> Delete
+                              <IconTrash size={13} /> Delete
                             </button>
                           </>
                         )}

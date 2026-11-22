@@ -2,6 +2,17 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { apiRequest } from '../api/client';
 import { IconPlus, IconFilter, IconClose } from './Icons';
 
+function formatNoteDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+}
+
 export default function Posts({ currentUser }) {
   const [posts, setPosts] = useState([]);
   const [pagination, setPagination] = useState({ currentPage: 1, totalPages: 1, totalCount: 0 });
@@ -254,9 +265,9 @@ export default function Posts({ currentUser }) {
                 </div>
                 <p className="note-content">{post.content}</p>
                 <div className="note-footer">
-                  <small className="note-date">
-                    {new Date(post.createdAt).toLocaleString()}
-                  </small>
+                  <span className="note-date">
+                    {formatNoteDate(post.createdAt)}
+                  </span>
                 </div>
               </div>
             );
