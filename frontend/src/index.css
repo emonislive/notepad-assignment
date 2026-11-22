@@ -267,6 +267,8 @@ code, pre {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  width: 100%;
+  max-width: 100%;
 }
 
 .form-row {
@@ -286,6 +288,8 @@ label {
 
 input, select, textarea {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 0.6rem 0.8rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -294,6 +298,22 @@ input, select, textarea {
   color: var(--text-primary);
   font-family: inherit;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 85px;
+  max-width: 100%;
+  min-width: 100%;
+  line-height: 1.5;
+  display: block;
+}
+
+.note-create-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
 }
 
 input:focus, select:focus, textarea:focus {
@@ -565,6 +585,13 @@ input::placeholder, textarea::placeholder {
 
 .edit-input, .edit-textarea {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.edit-textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
 /* ==========================================================================
